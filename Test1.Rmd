@@ -1,0 +1,69 @@
+---
+title: 'AnÃƒÂ¡lise de estruturas: Como plotar diagramas em R'
+output:
+  html_notebook: default
+  html_document: default
+---
+Iremos utilizar uma biblioteca de plotagem que eu acho dahora. Caso você não tenha, use o comando `install.packages("plotly")`
+
+```{r}
+library(plotly)
+```
+
+Primeiramente temos que definir o tamanho da viga e os nós.
+
+```{r, fig.height=2}
+# Tamanho da viga
+l = 5
+
+# Colocar os pontos cartesianos (incial e final) da vigaem um dataframe
+viga <- data.frame(
+  x = c(0, l),
+  y = c(0, 0)
+)
+
+line <- list(
+  width = 20
+)
+
+marker <- list(
+  color='red'
+)
+
+# Plotando a viga
+plot_ly(
+  viga, x = x, y = y,
+  type = 'scatter',
+  mode = 'lines+markers',
+  line = line,
+  marker = marker,
+  opacity = 0.6
+)
+
+```
+
+Cada nó deve conter sua posição e tipo. O tipo pode ser uma força ou uma reação (apoio).
+Da esquerda para a direita, o inicio da viga é o ponto zero.
+Colocar todos os nós em um vetor.
+
+```{r}
+nos = c(0, 3, 4)
+
+# Adicionar os nos finais da viga, ordenar e remover duplicados
+todos_nos = append(nos,viga$x)
+todos_nos = sort(todos_nos)
+todos_nos = unique(todos_nos)
+
+# Plotar a viga + nós
+plot_ly(
+  viga, x = x, y = y,
+  type = 'scatter',
+  mode = 'lines+markers',
+  line = line,
+  marker = marker,
+  opacity = 0.6
+) %>%
+  
+  add_trace(x = nos, y , mode = 'marker')
+```
+
